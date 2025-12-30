@@ -1,0 +1,17 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Verificar SO soportado
+      ansible.builtin.command: cat /etc/os-release
+      register: os
+
+    - name: Verificar Docker
+      ansible.builtin.command: docker --version
+
+    - name: Verificar conectividad interna
+      ansible.builtin.ping:
+
+    - name: Verificar repositorios offline
+      ansible.builtin.uri:
+        url: http://repo-local
+        method: HEAD
