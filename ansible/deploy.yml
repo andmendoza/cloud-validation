@@ -1,0 +1,3 @@
+- import_playbook: prechecks.yml
+- import_playbook: kolla-deploy.yml
+- import_playbook: validate.yml

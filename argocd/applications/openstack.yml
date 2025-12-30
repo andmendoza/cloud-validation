@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tactical-openstack
+spec:
+  source:
+    repoURL: ssh://git@github.com:andmendoza/cloud-validation.git
+    targetRevision: main
+    path: ansible
+  destination:
+    server: https://localhost
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+
