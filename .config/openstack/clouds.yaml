@@ -1,0 +1,13 @@
+clouds:
+  all-in-one:
+    auth:
+      auth_url: https://all-in-one.systemstackmr.com/v3
+      username: admin
+      password: pZKle7duGV2ezaGtprGvbUMRGDT3nWm8e0wcuCFB
+      project_name: admin
+      user_domain_name: Default
+      project_domain_name: Default
+    region_name: RegionOne
+    interface: public
+    identity_api_version: 3
+    verify: false
