@@ -18,7 +18,7 @@ pipeline {
        stage('Install OpenStack CLI') {
             steps {
                 sh '''
-                ${VENV_DIR}/bin/pip install -U pip
+                ${VENV_DIR}/bin/pip install -U pip && \
                 ${VENV_DIR}/bin/pip install python-openstackclient
                 '''
             }
