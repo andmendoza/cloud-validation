@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        WORKSPACE_DIR = "/var/jenkins_home/cloud-validation "
+        WORKSPACE_DIR = "/var/jenkins_home/cloud-validation"
         VENV_DIR = "${WORKSPACE_DIR}/openstack-venv"
         OS_CLIENT_CONFIG_FILE = "~/.config/openstack /clouds.yaml"
     }
