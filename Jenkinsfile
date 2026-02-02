@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.11-slim'
-            args '-u root'
-        }
-    }
+    agent any
 
     environment {
         WORKSPACE_DIR = "/var/jenkins_home/cloud-validation"
