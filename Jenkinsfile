@@ -41,7 +41,8 @@ pipeline {
                 sh '''
                     export OS_CLIENT_CONFIG_FILE=${OS_CLIENT_CONFIG_FILE}
                     chmod +x scripts/openstack/keystone.sh
-                    ${VENV_DIR}/bin/bash scripts/openstack/keystone.sh
+                    source ${VENV_DIR}/bin/activate
+                    bash scripts/openstack/keystone.sh
                 '''
             }
         }
