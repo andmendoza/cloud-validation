@@ -17,7 +17,7 @@ pipeline {
         stage('Preparar entorno OpenStack') {
             steps {
                 sh '''
-                    source ${VENV_DIR}/bin/activate
+                    . ${VENV_DIR}/bin/activate
                     openstack --version
                 '''
             }
