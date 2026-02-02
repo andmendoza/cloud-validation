@@ -1,5 +1,11 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.11-slim'
+            args '-u root'
+        }
+    }
+
     environment {
         WORKSPACE_DIR = "/var/jenkins_home/cloud-validation"
         VENV_DIR = "${WORKSPACE_DIR}/openstack-venv"
