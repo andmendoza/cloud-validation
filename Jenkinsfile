@@ -36,6 +36,15 @@ pipeline {
             }
         }
 
+        stage('OpenStack Services Health (No Auth)') {
+           steps {
+               sh '''
+                  chmod +x scripts/openstack/services_health.sh
+                  bash scripts/openstack/services_health.sh
+                  '''
+             }
+        }
+
         stage('Keystone health') {
             steps {
                 sh '''
