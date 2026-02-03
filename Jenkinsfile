@@ -17,8 +17,6 @@ pipeline {
             }
         }
 
-        stages {
-
         stage('Prepare Python venv') {
             steps {
                 sh '''
@@ -39,8 +37,6 @@ pipeline {
                 '''
             }
         }
-
-    }
 
         stage('Create venv & install OpenStack') {
             steps {
