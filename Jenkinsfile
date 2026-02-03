@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.13-slim'
-            args '-u root'
-        }
-    }
+    agent any
 
     environment {
         VENV_DIR = "${WORKSPACE}/openstack-venv"
@@ -24,19 +19,31 @@ pipeline {
 
         stage('Create venv & install OpenStack') {
             steps {
-                sh '''
-                    python3 -m venv ${VENV_DIR}
-                    ${VENV_DIR}/bin/pip install --upgrade pip
-                    ${VENV_DIR}/bin/pip install python-openstackclient
-                '''
+                node {
+                    script {
+                        docker.image('python:3.13-slim').inside('-u root') {
+                            sh '''
+                                python3 -m venv ${VENV_DIR}
+                                ${VENV_DIR}/bin/pip install --upgrade pip
+                                ${VENV_DIR}/bin/pip install python-openstackclient
+                            '''
+                        }
+                    }
+                }
             }
         }
 
         stage('Check OpenStack version') {
             steps {
-                sh '''
-                    ${VENV_DIR}/bin/openstack --version
-                '''
+                node {
+                    script {
+                        docker.image('python:3.13-slim').inside('-u root') {
+                            sh '''
+                                ${VENV_DIR}/bin/openstack --version
+                            '''
+                        }
+                    }
+                }
             }
         }
 
@@ -51,12 +58,18 @@ pipeline {
 
         stage('Keystone health') {
             steps {
-                sh '''
-                    export OS_CLIENT_CONFIG_FILE=${OS_CLIENT_CONFIG_FILE}
-                    chmod +x scripts/openstack/keystone.sh
-                    . ${VENV_DIR}/bin/activate
-                    bash scripts/openstack/keystone.sh
-                '''
+                node {
+                    script {
+                        docker.image('python:3.13-slim').inside('-u root') {
+                            sh '''
+                                export OS_CLIENT_CONFIG_FILE=${OS_CLIENT_CONFIG_FILE}
+                                chmod +x scripts/openstack/keystone.sh
+                                . ${VENV_DIR}/bin/activate
+                                bash scripts/openstack/keystone.sh
+                            '''
+                        }
+                    }
+                }
             }
         }
     }
