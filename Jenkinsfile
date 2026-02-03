@@ -26,9 +26,8 @@ pipeline {
             steps {
                 sh '''
                     python3 -m venv ${VENV_DIR}
-                    ${VENV_DIR}/bin/python -m ensurepip --upgrade
-                    ${VENV_DIR}/bin/python -m pip install --upgrade pip
-                    ${VENV_DIR}/bin/python -m pip install python-openstackclient
+                    ${VENV_DIR}/bin/pip install --upgrade pip
+                    ${VENV_DIR}/bin/pip install python-openstackclient
                 '''
             }
         }
@@ -42,12 +41,12 @@ pipeline {
         }
 
         stage('OpenStack Services Health (No Auth)') {
-           steps {
-               sh '''
-                  chmod +x scripts/openstack/services_health.sh
-                  bash scripts/openstack/services_health.sh
-                  '''
-             }
+            steps {
+                sh '''
+                    chmod +x scripts/openstack/services_health.sh
+                    bash scripts/openstack/services_health.sh
+                '''
+            }
         }
 
         stage('Keystone health') {
