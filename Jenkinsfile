@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.13-slim'
+            args '-u root'
+        }
 
     environment {
         VENV_DIR = "${WORKSPACE}/openstack-venv"
@@ -13,27 +17,6 @@ pipeline {
                 sh '''
                     echo "Inicio validación cloud"
                     date
-                '''
-            }
-        }
-
-        stage('Prepare Python venv') {
-            steps {
-                sh '''
-                    set -e
-
-                    echo "Instalando dependencias del sistema..."
-                    apt update
-                    apt install -y python3.13-venv
-
-                    echo "Creando virtualenv..."
-                    python3 -m venv openstack-venv
-
-                    echo "Activando virtualenv..."
-                    source openstack-venv/bin/activate
-
-                    python --version
-                    pip --version
                 '''
             }
         }
