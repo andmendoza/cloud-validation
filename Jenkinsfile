@@ -7,69 +7,36 @@ pipeline {
     }
 
     stages {
-
-        stage('Info') {
+        stage('Run OpenStack Validation') {
+            agent {
+                docker {
+                    image 'python:3.13-slim'
+                    args '-u root'
+                }
+            }
             steps {
                 sh '''
                     echo "Inicio validación cloud"
                     date
-                '''
-            }
-        }
 
-        stage('Create venv & install OpenStack') {
-            steps {
-                node {
-                    script {
-                        docker.image('python:3.13-slim').inside('-u root') {
-                            sh '''
-                                python3 -m venv ${VENV_DIR}
-                                ${VENV_DIR}/bin/pip install --upgrade pip
-                                ${VENV_DIR}/bin/pip install python-openstackclient
-                            '''
-                        }
-                    }
-                }
-            }
-        }
+                    echo "Creando virtualenv..."
+                    python3 -m venv ${VENV_DIR}
+                    ${VENV_DIR}/bin/pip install --upgrade pip
+                    ${VENV_DIR}/bin/pip install python-openstackclient
 
-        stage('Check OpenStack version') {
-            steps {
-                node {
-                    script {
-                        docker.image('python:3.13-slim').inside('-u root') {
-                            sh '''
-                                ${VENV_DIR}/bin/openstack --version
-                            '''
-                        }
-                    }
-                }
-            }
-        }
+                    echo "Verificando OpenStack CLI..."
+                    ${VENV_DIR}/bin/openstack --version
 
-        stage('OpenStack Services Health (No Auth)') {
-            steps {
-                sh '''
+                    echo "Ejecutando OpenStack Services Health..."
                     chmod +x scripts/openstack/services_health.sh
                     bash scripts/openstack/services_health.sh
-                '''
-            }
-        }
 
-        stage('Keystone health') {
-            steps {
-                node {
-                    script {
-                        docker.image('python:3.13-slim').inside('-u root') {
-                            sh '''
-                                export OS_CLIENT_CONFIG_FILE=${OS_CLIENT_CONFIG_FILE}
-                                chmod +x scripts/openstack/keystone.sh
-                                . ${VENV_DIR}/bin/activate
-                                bash scripts/openstack/keystone.sh
-                            '''
-                        }
-                    }
-                }
+                    echo "Ejecutando Keystone health check..."
+                    export OS_CLIENT_CONFIG_FILE=${OS_CLIENT_CONFIG_FILE}
+                    chmod +x scripts/openstack/keystone.sh
+                    . ${VENV_DIR}/bin/activate
+                    bash scripts/openstack/keystone.sh
+                '''
             }
         }
     }
