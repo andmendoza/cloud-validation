@@ -4,6 +4,7 @@ pipeline {
             image 'python:3.13-slim'
             args '-u root'
         }
+    }
 
     environment {
         VENV_DIR = "${WORKSPACE}/openstack-venv"
