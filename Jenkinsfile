@@ -17,6 +17,31 @@ pipeline {
             }
         }
 
+        stages {
+
+        stage('Prepare Python venv') {
+            steps {
+                sh '''
+                    set -e
+
+                    echo "Instalando dependencias del sistema..."
+                    apt update
+                    apt install -y python3.13-venv
+
+                    echo "Creando virtualenv..."
+                    python3 -m venv openstack-venv
+
+                    echo "Activando virtualenv..."
+                    source openstack-venv/bin/activate
+
+                    python --version
+                    pip --version
+                '''
+            }
+        }
+
+    }
+
         stage('Create venv & install OpenStack') {
             steps {
                 sh '''
