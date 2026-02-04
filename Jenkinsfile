@@ -65,6 +65,28 @@ pipeline {
             }
         }
 
+        stage('Nova Health & Scheduler') {
+            steps {
+                sh '''
+                    echo "=== Validando Nova ==="
+                    chmod +x scripts/openstack/nova.sh
+                    # Ejecutar el script usando bash del sistema y el venv
+                    bash -c "OS_CLIENT_CONFIG_FILE=${OS_CLIENT_CONFIG_FILE} ${VENV_DIR}/bin/bash scripts/openstack/nova.sh"
+                '''
+            }
+        }
+
+        stage('Check OpenStack Public Services') {
+            steps {
+                sh '''
+                    echo "=== Validando endpoints públicos de OpenStack ==="
+                    chmod +x scripts/openstack/public_services.sh
+                    # Ejecutar el script con bash del sistema
+                    bash scripts/openstack/public_services.sh
+                '''
+            }
+        }        
+
     }
 
     post {
