@@ -25,11 +25,14 @@ pipeline {
             steps {
                 sh '''
                     set -e
-
+        
                     if [ ! -d "${VENV_DIR}" ]; then
                         python3 -m venv ${VENV_DIR}
                     fi
-
+        
+                    # Asegura pip dentro del venv
+                    ${VENV_DIR}/bin/python -m ensurepip --upgrade
+        
                     ${VENV_DIR}/bin/python -m pip install --upgrade pip
                     ${VENV_DIR}/bin/pip install python-openstackclient
                 '''
