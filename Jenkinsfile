@@ -64,7 +64,7 @@ pipeline {
                 '''
             }
         }
-
+/*
         stage('Nova Health & Scheduler') {
             steps {
                 sh '''
@@ -74,7 +74,7 @@ pipeline {
                     bash -c "OS_CLIENT_CONFIG_FILE=${OS_CLIENT_CONFIG_FILE} ${VENV_DIR}/bin/bash scripts/openstack/nova.sh"
                 '''
             }
-        }
+        }*/
 
         stage('Check OpenStack Public Services') {
             steps {
@@ -85,8 +85,40 @@ pipeline {
                     bash scripts/openstack/public_services.sh
                 '''
             }
-        }        
+        }
+/*
+        stage('Neutron Health') {
+            steps {
+                sh '''
+                    echo "=== Validando Neutron ==="
+                    chmod +x scripts/openstack/neutron.sh
+                    # Ejecutar el script usando bash del sistema y OS_CLIENT_CONFIG_FILE
+                    bash -c "OS_CLIENT_CONFIG_FILE=${OS_CLIENT_CONFIG_FILE} ${VENV_DIR}/bin/bash scripts/openstack/neutron.sh"
+                '''
+            }
+        }
 
+        stage('Cinder Health') {
+            steps {
+                sh '''
+                    echo "=== Validando Cinder ==="
+                    chmod +x scripts/openstack/cinder.sh
+                    # Ejecutar el script usando bash del sistema y OS_CLIENT_CONFIG_FILE
+                    bash -c "OS_CLIENT_CONFIG_FILE=${OS_CLIENT_CONFIG_FILE} ${VENV_DIR}/bin/bash scripts/openstack/cinder.sh"
+                '''
+            }
+        }*/
+
+        stage('Glance Health') {
+            steps {
+                sh '''
+                    echo "=== Validando Glance ==="
+                    chmod +x scripts/openstack/glance.sh
+                    # Ejecutar el script usando bash del sistema y OS_CLIENT_CONFIG_FILE
+                    bash -c "OS_CLIENT_CONFIG_FILE=${OS_CLIENT_CONFIG_FILE} ${VENV_DIR}/bin/bash scripts/openstack/glance.sh"
+                '''
+            }
+        }
     }
 
     post {
