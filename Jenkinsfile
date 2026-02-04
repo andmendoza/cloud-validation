@@ -50,7 +50,7 @@ pipeline {
             steps {
                 sh '''
                     chmod +x scripts/openstack/services_health.sh
-                    ${VENV_DIR}/bin/bash scripts/openstack/services_health.sh
+                    bash scripts/openstack/services_health.sh
                 '''
             }
         }
@@ -59,7 +59,7 @@ pipeline {
             steps {
                 sh '''
                     chmod +x scripts/openstack/keystone.sh
-                    ${VENV_DIR}/bin/bash scripts/openstack/keystone.sh
+                    bash scripts/openstack/keystone.sh
                 '''
             }
         }
