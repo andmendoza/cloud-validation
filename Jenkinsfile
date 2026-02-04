@@ -4,7 +4,6 @@ pipeline {
     environment {
         VENV_DIR = "${WORKSPACE}/openstack-venv"
         OS_CLIENT_CONFIG_FILE = "${WORKSPACE}/.config/openstack/clouds.yaml"
-        PATH = "${VENV_DIR}/bin:${env.PATH}"
     }
 
     stages {
@@ -12,26 +11,25 @@ pipeline {
         stage('Info') {
             steps {
                 sh '''
-                    set -e
                     echo "Inicio validación cloud"
                     date
-                    whoami
                 '''
             }
         }
 
-        stage('Check venv') {
+        stage('Check OpenStack version') {
             steps {
                 sh '''
-                    set -e
+                    ${VENV_DIR}/bin/openstack --version
+                '''
+            }
+        }
 
-                    if [ ! -x "${VENV_DIR}/bin/openstack" ]; then
-                        echo "ERROR: venv no existe o openstack no está instalado"
-                        exit 1
-                    fi
-
-                    python --version
-                    openstack --version
+        stage('OpenStack Services Health (No Auth)') {
+            steps {
+                sh '''
+                    chmod +x scripts/openstack/services_health.sh
+                    ${VENV_DIR}/bin/bash scripts/openstack/services_health.sh
                 '''
             }
         }
@@ -39,17 +37,8 @@ pipeline {
         stage('Keystone health') {
             steps {
                 sh '''
-                    set -e
-
-                    export OS_CLIENT_CONFIG_FILE=${OS_CLIENT_CONFIG_FILE}
-
-                    if [ ! -f "$OS_CLIENT_CONFIG_FILE" ]; then
-                        echo "ERROR: clouds.yaml no encontrado"
-                        exit 1
-                    fi
-
                     chmod +x scripts/openstack/keystone.sh
-                    bash scripts/openstack/keystone.sh
+                    ${VENV_DIR}/bin/bash scripts/openstack/keystone.sh
                 '''
             }
         }
@@ -57,7 +46,7 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'reports/**', fingerprint: true, allowEmptyArchive: true
+            archiveArtifacts artifacts: 'reports/**', fingerprint: true
         }
     }
 }
