@@ -49,6 +49,7 @@ pipeline {
         stage('OpenStack Services Health (No Auth)') {
             steps {
                 sh '''
+                    echo "=== Validando endpoints públicos de OpenStack ==="
                     chmod +x scripts/openstack/services_health.sh
                     bash scripts/openstack/services_health.sh
                 '''
@@ -74,19 +75,8 @@ pipeline {
                     bash -c "OS_CLIENT_CONFIG_FILE=${OS_CLIENT_CONFIG_FILE} ${VENV_DIR}/bin/bash scripts/openstack/nova.sh"
                 '''
             }
-        }*/
-
-        stage('Check OpenStack Public Services') {
-            steps {
-                sh '''
-                    echo "=== Validando endpoints públicos de OpenStack ==="
-                    chmod +x scripts/openstack/public_services.sh
-                    # Ejecutar el script con bash del sistema
-                    bash scripts/openstack/public_services.sh
-                '''
-            }
         }
-/*
+        
         stage('Neutron Health') {
             steps {
                 sh '''
