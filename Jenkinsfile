@@ -4,7 +4,6 @@ pipeline {
     environment {
         VENV_DIR = "${WORKSPACE}/openstack-venv"
         OS_CLIENT_CONFIG_FILE = "${WORKSPACE}/.config/openstack/clouds.yaml"
-        OPENSTACK_PY = "${VENV_DIR}/bin/python -m openstack"
     }
 
     stages {
@@ -29,11 +28,20 @@ pipeline {
             }
         }
 
+        stage('Debug OpenStack CLI') {
+            steps {
+                sh '''
+                    echo "Comandos disponibles de OpenStack:"
+                    ${VENV_DIR}/bin/openstack help
+                '''
+            }
+        }
+
         stage('Check OpenStack version') {
             steps {
                 sh '''
                     echo "OpenStack version:"
-                    ${OPENSTACK_PY} --version
+                    ${VENV_DIR}/bin/openstack version
                 '''
             }
         }
@@ -55,12 +63,19 @@ pipeline {
                 '''
             }
         }
+
     }
 
     post {
         always {
             echo 'Archiving reports (if any)...'
             archiveArtifacts artifacts: 'reports/**', fingerprint: true
+        }
+        success {
+            echo 'Pipeline completada correctamente '
+        }
+        failure {
+            echo 'Pipeline falló '
         }
     }
 }
