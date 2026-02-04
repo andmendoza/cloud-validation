@@ -104,8 +104,8 @@ pipeline {
                 sh '''
                     echo "=== Validando Glance ==="
                     chmod +x scripts/openstack/glance.sh
-                    # Ejecutar el script usando bash del sistema y OS_CLIENT_CONFIG_FILE
-                    bash -c "OS_CLIENT_CONFIG_FILE=${OS_CLIENT_CONFIG_FILE} ${VENV_DIR}/bin/bash scripts/openstack/glance.sh"
+                    export OS_CLIENT_CONFIG_FILE=${OS_CLIENT_CONFIG_FILE}
+                    bash scripts/openstack/glance.sh
                 '''
             }
         }
