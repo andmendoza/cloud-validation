@@ -56,6 +56,15 @@ pipeline {
             }
         }
 
+        stage('Debug clouds.yaml') {
+            steps {
+                sh '''
+                    echo "Usando clouds.yaml:"
+                    cat ${OS_CLIENT_CONFIG_FILE}
+                '''
+            }
+        }
+
         stage('Keystone Health') {
             steps {
                 sh '''
