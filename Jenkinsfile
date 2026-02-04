@@ -59,7 +59,8 @@ pipeline {
             steps {
                 sh '''
                     chmod +x scripts/openstack/keystone.sh
-                    bash scripts/openstack/keystone.sh
+                    # Ejecutar con --insecure para evitar problemas de SSL/Cloudflare
+                    bash -c "OS_CLIENT_CONFIG_FILE=${OS_CLIENT_CONFIG_FILE} ${VENV_DIR}/bin/openstack --os-cloud all-in-one --insecure token issue"
                 '''
             }
         }
