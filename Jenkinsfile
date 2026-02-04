@@ -69,8 +69,13 @@ pipeline {
 
     post {
         always {
-            echo 'Archiving reports (if any)...'
-            archiveArtifacts artifacts: 'reports/**', fingerprint: true
+            script {
+                if (!fileExists('reports')) {
+                    sh 'mkdir -p reports'
+                }
+                echo 'Archiving reports (if any)...'
+                archiveArtifacts artifacts: 'reports/**', fingerprint: true
+            }
         }
         success {
             echo 'Pipeline completada correctamente '
