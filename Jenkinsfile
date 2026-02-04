@@ -41,7 +41,7 @@ pipeline {
             steps {
                 sh '''
                     echo "OpenStack version:"
-                    ${VENV_DIR}/bin/openstack version
+                    ${VENV_DIR}/bin/openstack --version
                 '''
             }
         }
